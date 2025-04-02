@@ -40,7 +40,7 @@ export const registerUser = createAsyncThunk(
                 return rejectWithValue("Signup successful, but login failed.");
             }
 
-            return userData; // ✅ Return user data after successful login
+            return userData; 
         } catch (error: any) {
             return rejectWithValue(error.message);
         }
@@ -54,7 +54,7 @@ const authSlice = createSlice({
         loading: false,
         error: null as string | null,
     },
-    reducers: {}, // No synchronous reducers needed here
+    reducers: {}, 
     extraReducers: (builder) => {
         builder
             .addCase(registerUser.pending, (state) => {
@@ -63,7 +63,7 @@ const authSlice = createSlice({
             })
             .addCase(registerUser.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = action.payload; // ✅ Store user data after login
+                state.user = action.payload; 
             })
             .addCase(registerUser.rejected, (state, action) => {
                 state.loading = false;
