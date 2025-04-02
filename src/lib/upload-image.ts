@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { cloudinary } from "./cloudinary";
 
 export const UploadImage = async (
