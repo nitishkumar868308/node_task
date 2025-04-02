@@ -10,10 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { AlertCircle } from "lucide-react";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const [error, setError] = useState("");
 
     // Form validation schema using Yup
     const validationSchema = Yup.object({
@@ -30,11 +32,19 @@ const Login = () => {
         validationSchema,
         onSubmit: async (values) => {
             setLoading(true);
+            setError("");
             try {
-                // Simulating API call
-                console.log("Logging in with:", values);
-                await new Promise((resolve) => setTimeout(resolve, 1500)); // Fake API delay
-                router.push("/dashboard"); // Redirect on success
+                const res = await signIn("credentials", {
+                    redirect: false,
+                    email: values.email,
+                    password: values.password,
+                });
+                if (res?.error) {
+                    setError("Invalid email or password");
+                } else {
+                    router.push("/dashboard");
+                }
+                setLoading(false);
             } catch (error) {
                 console.error("Login failed:", error);
             } finally {
@@ -84,6 +94,8 @@ const Login = () => {
                                 </div>
                             )}
                         </div>
+
+                        {error && <div className="text-red-500 text-sm">{error}</div>}
 
                         {/* Submit Button */}
                         <Button type="submit" className="w-full cursor-pointer" disabled={loading}>
